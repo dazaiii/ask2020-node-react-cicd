@@ -18,13 +18,21 @@ jobs:
 #       - checkout
 #       - run: | 
 #           echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
-#       - run: docker build -t docker push dazaiii/ask2020-node-react-cicd ./server
+#       - run: docker build -t  dazaiii/ask2020-node-react-cicd ./server
 #       - run: docker push dazaiii/ask2020-node-react-cicd
+  building-server:
+    machine: true
+    steps:
+      - checkout
+      - run: |
+          echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker build -t dazaiii/ask2020-node-react-cicd ./server .
+      - run: docker push dazaiii/ask2020-node-react-cicd
 workflows:
     build-and-test:
       jobs:
+        - building server
         - build-and-test:
-#        - building-server
            filters:
              branches:
                 only: master
