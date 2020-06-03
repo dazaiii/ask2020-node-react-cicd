@@ -17,7 +17,7 @@ jobs:
      steps:
        - checkout
 #       - run: docker login --username $DOCKER_USER --password-stdin
-       - run: docker build -t docker push dazaiii/ask2020-node-react-cicd .
+       - run: docker build -t docker push dazaiii/ask2020-node-react-cicd
        - run: docker push dazaiii/ask2020-node-react-cicd:tagname
 workflows:
     build-and-test:
