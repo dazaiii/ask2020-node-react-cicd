@@ -31,7 +31,10 @@ jobs:
 workflows:
     build-and-test:
       jobs:
-        - building server
+        - building server:
+           filters:
+             branches:
+                only: master
         - build-and-test:
            filters:
              branches:
