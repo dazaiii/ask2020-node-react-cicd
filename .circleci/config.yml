@@ -12,20 +12,19 @@ jobs:
       - run: 
           command: npm test
           working_directory: ./server
-  building-server:
-     machine: true
-     steps:
-       - checkout
-       - run: | 
-           echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
-       - run: docker build -t docker push dazaiii/ask2020-node-react-cicd ./server
-       - run: docker push dazaiii/ask2020-node-react-cicd:tagname
+#  building-server:
+#     machine: true
+#     steps:
+#       - checkout
+#       - run: | 
+#           echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
+#       - run: docker build -t docker push dazaiii/ask2020-node-react-cicd ./server
+#       - run: docker push dazaiii/ask2020-node-react-cicd
 workflows:
     build-and-test:
       jobs:
         - build-and-test
-        - building-server
-#    filters:
-#     branches:
-#      ignore:
-#      - dev
+#        - building-server
+           filters:
+             branches:
+                only: master
