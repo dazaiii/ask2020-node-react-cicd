@@ -5,18 +5,16 @@ jobs:
  build-and-test:
 #  docker:
 #   - image: circleci/node:latest
-  working_directory: ./server/
+#  working_directory: ./server/
   executor: 
    name: node/default
   steps:
    - checkout
-#   - node/with-cache:
-#    steps:
-#     - run: npm install
-#     - run: npm test
-   - node/install-packages
-#   - run: npm install
-   - run: npm test
+   - node/install-packages:
+    app-dir: ./server
+   - run: 
+    command: npm test
+    working_directory: ./server
 workflows:
  build-and-test:
   jobs:
