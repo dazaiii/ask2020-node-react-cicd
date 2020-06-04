@@ -48,8 +48,6 @@ jobs:
             sudo docker build ./client -t dazaiii/cli
             sudo docker push dazaiii/cli
 
-
-
 workflows:
     build-and-test:
       jobs:
