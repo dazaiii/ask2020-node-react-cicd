@@ -38,14 +38,14 @@ jobs:
     steps:
       - checkout
       - run:
-          context: DOCKER_LOGIN
+          context: $DOCKER_LOGIN
           command: |
             echo \"$DOCKER_LOGIN\" | docker login -u \"dazaiii\" --password-stdin
             sudo docker build ./server -t dazaiii/server
             sudo docker push dazaiii/server
             
       - run:
-          context: DOCKER_LOGIN
+          context: $DOCKER_LOGIN
           command: |
             echo \"$DOCKER_LOGIN\" | docker login -u \"dazaiii\" --password-stdin
             sudo docker build ./client -t dazaiii/client
