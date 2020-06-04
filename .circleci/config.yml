@@ -52,7 +52,7 @@ jobs:
 workflows:
     build-and-test:
       jobs:
-        - docker-setup
+        - setup-docker
         - test-serv:
           filters:
             branches:
