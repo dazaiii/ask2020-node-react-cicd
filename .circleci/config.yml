@@ -43,7 +43,6 @@ jobs:
             echo \"$DOCKER_LOGIN\" | docker login -u \"dazaiii\" --password-stdin
             sudo docker build ./server -t dazaiii/server
             sudo docker push dazaiii/server
-          
             
       - run:
           context: DOCKER_LOGIN
