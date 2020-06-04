@@ -1,8 +1,9 @@
+
 version: 2.1
 orbs:
   node: circleci/node@2.1.0
 jobs:
-  build-and-test:
+  test-serv:
     executor: 
       name: node/default
     steps:
@@ -12,30 +13,62 @@ jobs:
       - run: 
           command: npm test
           working_directory: ./server
-#  building-server:
-#     machine: true
-#     steps:
-#       - checkout
-#       - run: | 
-#           echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
-#       - run: docker build -t  dazaiii/ask2020-node-react-cicd ./server
-#       - run: docker push dazaiii/ask2020-node-react-cicd
-  building-server:
+          
+  setup-docker:
+     executor:
+       name: node/default
+     steps:
+       - checkout
+       - setup_remote_docker
+       
+  test-cli:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: ./client
+      - run:
+          command: npm test
+          working_directory: ./client
+
+  publish-docker:
     machine: true
     steps:
       - checkout
-      - run: |
-          echo \"$DOCKER_PASS\" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker build -t dazaiii/ask2020-node-react-cicd ./server .
-      - run: docker push dazaiii/ask2020-node-react-cicd
+      - run:
+          command: |
+            echo \"$DOCKER_LOGIN\" | docker login -u \"dazaiii\" --password-stdin
+            sudo docker build ./server -t dazaiii/srv
+            sudo docker push dazaiii/srv
+            
+      - run:
+          command: |
+            echo \"$DOCKER_LOGIN\" | docker login -u \"dazaiii\" --password-stdin
+            sudo docker build ./client -t dazaiii/cli
+            sudo docker push dazaiii/cli
+
+
 workflows:
     build-and-test:
       jobs:
-        - building-server:
-           filters:
-             branches:
-                only: master
-        - build-and-test:
-           filters:
-             branches:
-                only: master
+        - docker-setup
+        - test-serv:
+          filters:
+            branches:
+             only:
+               - master
+        - test-cli:
+          filters:
+            branches:
+             only:
+               - master
+        - publish-docker:
+            filters:
+              branches:
+                only:
+                  - master
+            requires:
+              - setup-docker
+              - test-serv
+              - test-cli
